@@ -1,4 +1,4 @@
-# tix_analytics
+# example
 
 A new flutter module project.
 

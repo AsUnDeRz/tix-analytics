@@ -1,0 +1,23 @@
+name: tix_analytics
+description: A new flutter module project.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.6.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  sentry: 3.0.1
+  device_info: ^0.4.2+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  module:
+    androidX: true
+    androidPackage: com.example.tix_analytics
+    iosBundleIdentifier: com.example.tixAnalytics
