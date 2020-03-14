@@ -1,17 +1,29 @@
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:sentry/sentry.dart';
-import 'package:tix_analytics/device_info.dart';
-import 'package:tix_analytics/event.dart';
+import 'package:tix_analytics/src/device_info.dart';
+import 'package:tix_analytics/src/event.dart';
 
 abstract class CoreAnalyticsProvider {
   void tix(dynamic);
 }
 
-mixin TixAnalyticsMixin<T extends StatefulWidget> on State<T> implements CoreAnalyticsProvider {
+mixin Tix<T extends StatefulWidget> on State<T> implements CoreAnalyticsProvider {
   @override
   void tix(dynamic) {
     CoreAnalytics.instance.tix(dynamic);
+  }
+
+  @override
+  void initState() {
+    CoreAnalytics.instance.tix(TixEvent()..name = 'initState');
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    CoreAnalytics.instance.tix(TixEvent()..name = 'dispose');
+    super.dispose();
   }
 }
 

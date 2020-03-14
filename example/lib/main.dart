@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tix_analytics/tix.dart';
 
 void main() => runApp(MyApp());
 
@@ -42,10 +43,11 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TixAn {
+class _MyHomePageState extends State<MyHomePage> with Tix {
   int _counter = 0;
 
   void _incrementCounter() {
+    tix(TixEvent.click(_counter)..name = 'incrementCounter');
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -54,6 +56,11 @@ class _MyHomePageState extends State<MyHomePage> with TixAn {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
