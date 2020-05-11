@@ -15,20 +15,20 @@ Future<Map<String, dynamic>> mapperDeviceInfo(DeviceInfoPlugin deviceInfoPlugin)
   return deviceInfo;
 }
 
-Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
-  return <String, dynamic>{
+Map<String, String> _readIosDeviceInfo(IosDeviceInfo data) {
+  return <String, String>{
     'name': data.name,
     'systemName': data.systemName,
     'systemVersion': data.systemVersion,
     'model': data.model,
     'identifierForVendor': data.identifierForVendor,
-    'isPhysicalDevice': data.isPhysicalDevice,
+    'isPhysicalDevice': data.isPhysicalDevice.toString(),
   };
 }
 
-Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
-  return <String, dynamic>{
-    'version.sdkInt': build.version.sdkInt,
+Map<String, String> _readAndroidBuildData(AndroidDeviceInfo build) {
+  return <String, String>{
+    'version.sdkInt': build.version.sdkInt.toString(),
     'version.release': build.version.release,
     'brand': build.brand,
     'device': build.device,
@@ -37,10 +37,7 @@ Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
     'id': build.id,
     'manufacturer': build.manufacturer,
     'model': build.model,
-    'supported32BitAbis': build.supported32BitAbis,
-    'supported64BitAbis': build.supported64BitAbis,
-    'supportedAbis': build.supportedAbis,
-    'isPhysicalDevice': build.isPhysicalDevice,
+    'isPhysicalDevice': build.isPhysicalDevice.toString(),
     'androidId': build.androidId,
   };
 }

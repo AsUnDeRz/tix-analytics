@@ -18,7 +18,7 @@ class TixAnalytics {
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   SentryClient sentry;
   FirebaseAnalytics firebaseAnalytics;
-  Map<String, dynamic> tagsDeviceInfo = {};
+  Map<String, String> tagsDeviceInfo = {};
 
   TixAnalytics._init();
 
