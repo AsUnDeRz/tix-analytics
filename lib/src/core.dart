@@ -54,14 +54,11 @@ class TixAnalytics {
   }
 
   void logError(String name, dynamic error, dynamic stackTrace) {
-    assert(() {
-      if (sentry != null) {
-        sentry.capture(
-            event: Event(
-                loggerName: name, exception: error, stackTrace: stackTrace, tags: tagsDeviceInfo));
-      }
-      return true;
-    }());
+    if (sentry != null) {
+      sentry.capture(
+          event: Event(
+              loggerName: name, exception: error, stackTrace: stackTrace, tags: tagsDeviceInfo));
+    }
   }
 
   Future<void> logFireBaseAnalytics(TixEvent event) async {

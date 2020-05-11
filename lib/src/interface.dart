@@ -25,28 +25,22 @@ mixin Tix<T extends StatefulWidget> on State<T> implements TixAnalyticsProvider 
 
   @override
   void startTix() {
-    assert(() {
-      if (timer == null) {
-        timer = Timer.periodic(Duration(seconds: 1), (_) {});
-        TixAnalytics.instance.tix(TixEvent()
-          ..name = 'startTix$runtimeType'
-          ..values = timer.tick);
-      }
-      return true;
-    }());
+    if (timer == null) {
+      timer = Timer.periodic(Duration(seconds: 1), (_) {});
+      TixAnalytics.instance.tix(TixEvent()
+        ..name = 'startTix$runtimeType'
+        ..values = timer.tick);
+    }
   }
 
   @override
   void endTix() {
-    assert(() {
-      if (timer != null) {
-        timer.cancel();
-        TixAnalytics.instance.tix(TixEvent()
-          ..name = 'endTix$runtimeType'
-          ..values = timer.tick);
-      }
-      return true;
-    }());
+    if (timer != null) {
+      timer.cancel();
+      TixAnalytics.instance.tix(TixEvent()
+        ..name = 'endTix$runtimeType'
+        ..values = timer.tick);
+    }
   }
 
   @override
