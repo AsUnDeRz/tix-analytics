@@ -61,6 +61,10 @@ class TixAnalytics {
     }
   }
 
+  void observeRouteChange(String path) async {
+    await logScreen(path);
+  }
+
   Future<void> logFireBaseAnalytics(TixEvent event) async {
     if (firebaseAnalytics != null) {
       return await firebaseAnalytics.logEvent(
@@ -69,6 +73,15 @@ class TixAnalytics {
       );
     } else {
       return Future.value();
+    }
+  }
+
+  Future<void> logScreen(String name) async {
+    if (firebaseAnalytics != null) {
+      return await firebaseAnalytics.setCurrentScreen(
+        screenName: name,
+        screenClassOverride: name,
+      );
     }
   }
 }
