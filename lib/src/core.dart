@@ -19,10 +19,11 @@ class TixAnalytics {
   SentryClient sentry;
   FirebaseAnalytics firebaseAnalytics;
   Map<String, String> tagsDeviceInfo = {};
+  String env;
 
   TixAnalytics._init();
 
-  Future init({String dsn = '', FirebaseAnalytics analytics}) async {
+  Future init({String dsn = '', FirebaseAnalytics analytics, String envConfig = 'alpha'}) async {
     if (dsn.isNotEmpty) {
       sentry = new SentryClient(dsn: dsn);
     }
@@ -30,6 +31,7 @@ class TixAnalytics {
       firebaseAnalytics = analytics;
     }
     tagsDeviceInfo = await mapperDeviceInfo(deviceInfoPlugin);
+    env = envConfig;
     return Future.value({debugPrint(tagsDeviceInfo.toString())});
   }
 
@@ -57,7 +59,11 @@ class TixAnalytics {
     if (sentry != null) {
       sentry.capture(
           event: Event(
-              loggerName: name, exception: error, stackTrace: stackTrace, tags: tagsDeviceInfo));
+              loggerName: name,
+              exception: error,
+              stackTrace: stackTrace,
+              tags: tagsDeviceInfo,
+              environment: env));
     }
   }
 
