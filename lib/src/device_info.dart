@@ -23,6 +23,7 @@ Map<String, String> _readIosDeviceInfo(IosDeviceInfo data) {
     'model': data.model,
     'identifierForVendor': data.identifierForVendor,
     'isPhysicalDevice': data.isPhysicalDevice.toString(),
+    'platform': 'ios'
   };
 }
 
@@ -39,5 +40,6 @@ Map<String, String> _readAndroidBuildData(AndroidDeviceInfo build) {
     'model': build.model,
     'isPhysicalDevice': build.isPhysicalDevice.toString(),
     'androidId': build.androidId,
+    'platform': 'android'
   };
 }
