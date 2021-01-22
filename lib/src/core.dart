@@ -59,7 +59,13 @@ class TixAnalytics {
   }
 
   void logError(String name, dynamic error, dynamic stackTrace) async {
-    await Sentry.captureException(error, stackTrace: stackTrace);
+    // await Sentry.captureException(error, stackTrace: stackTrace);
+    await Sentry.captureEvent(
+        SentryEvent(
+            exception: SentryException(type: "error", value: error),
+            tags: tagsDeviceInfo,
+            environment: env),
+        stackTrace: stackTrace);
   }
 
   void observeRouteChange(String path) async {
