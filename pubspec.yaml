@@ -8,7 +8,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sentry: 3.0.1
+  sentry: 4.0.2
   device_info: ^0.4.2+4
   firebase_analytics: ^6.0.0
 
