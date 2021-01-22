@@ -62,7 +62,7 @@ class TixAnalytics {
     // await Sentry.captureException(error, stackTrace: stackTrace);
     await Sentry.captureEvent(
         SentryEvent(
-            exception: SentryException(type: "error", value: error.toString()),
+            exception: SentryException(type: "error[${error.toString()}]", value: error.toString()),
             tags: tagsDeviceInfo,
             environment: env),
         stackTrace: stackTrace);
