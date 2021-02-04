@@ -27,9 +27,6 @@ mixin Tix<T extends StatefulWidget> on State<T> implements TixAnalyticsProvider 
   void startTix() {
     if (timer == null) {
       timer = Timer.periodic(Duration(seconds: 1), (_) {});
-      TixAnalytics.instance.tix(TixEvent()
-        ..name = 'startTix$runtimeType'
-        ..values = timer.tick);
     }
   }
 
@@ -37,9 +34,10 @@ mixin Tix<T extends StatefulWidget> on State<T> implements TixAnalyticsProvider 
   void endTix() {
     if (timer != null) {
       timer.cancel();
-      TixAnalytics.instance.tix(TixEvent()
-        ..name = 'endTix$runtimeType'
-        ..values = timer.tick);
+      TixAnalytics.instance.logScreenTime(TixEvent()
+        ..name = 'screen_time'
+        ..values = {"second": timer.tick, "screen_name": "$runtimeType"});
+      timer = null;
     }
   }
 

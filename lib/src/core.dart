@@ -4,8 +4,10 @@
  * found in the LICENSE file.
  */
 import 'package:device_info/device_info.dart';
+import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutuate_mixpanel/flutuate_mixpanel.dart';
 import 'package:sentry/sentry.dart';
 import 'package:tix_analytics/src/device_info.dart';
 import 'package:tix_analytics/src/event.dart';
@@ -16,13 +18,20 @@ class TixAnalytics {
   static final TixAnalytics _singleton = TixAnalytics._init();
 
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  FirebaseAnalytics firebaseAnalytics;
+  FirebaseAnalytics _firebaseAnalytics;
+  FacebookAppEvents _facebookAppEvents;
+  MixpanelAPI _mixpanel;
   Map<String, String> tagsDeviceInfo = {};
   String env;
 
   TixAnalytics._init();
 
-  Future init({String dsn = '', FirebaseAnalytics analytics, String envConfig = 'alpha'}) async {
+  Future init(
+      {String dsn = '',
+      FirebaseAnalytics analytics,
+      String envConfig = 'alpha',
+      FacebookAppEvents appEvents,
+      MixpanelAPI mixpanel}) async {
     if (dsn.isNotEmpty) {
       await Sentry.init(
         (options) {
@@ -31,7 +40,15 @@ class TixAnalytics {
       );
     }
     if (analytics != null) {
-      firebaseAnalytics = analytics;
+      _firebaseAnalytics = analytics;
+    }
+    if (appEvents != null) {
+      _facebookAppEvents = appEvents;
+      _facebookAppEvents.logActivatedApp();
+    }
+    if (mixpanel != null) {
+      _mixpanel = mixpanel;
+      await flushEvent();
     }
     tagsDeviceInfo = await mapperDeviceInfo(deviceInfoPlugin);
     env = envConfig;
@@ -42,19 +59,19 @@ class TixAnalytics {
     assert(dynamic != null);
     switch (dynamic.runtimeType) {
       case TixEvent:
-        log(dynamic.name, dynamic.values);
-        await logFireBaseAnalytics(dynamic);
+        logDebug(dynamic.name, dynamic.values);
+        await logEvent(dynamic);
         break;
       case TixError:
         logError(dynamic.name, dynamic.error, dynamic.stackTrace);
         break;
       default:
-        log('unhandle', dynamic);
+        logDebug('unhandle', dynamic);
         break;
     }
   }
 
-  void log(String name, dynamic value) {
+  void logDebug(String name, dynamic value) {
     debugPrint(DateTime.now().toString() + '  ' + name + '  ' + '$value');
   }
 
@@ -72,23 +89,42 @@ class TixAnalytics {
     await logScreen(path);
   }
 
-  Future<void> logFireBaseAnalytics(TixEvent event) async {
-    if (firebaseAnalytics != null) {
-      return await firebaseAnalytics.logEvent(
-        name: event.name,
-        parameters: event.values,
-      );
-    } else {
-      return Future.value();
+  Future<void> logEvent(TixEvent event) async {
+    if (_firebaseAnalytics != null) {
+      await _firebaseAnalytics.logEvent(name: event.name, parameters: event.values);
     }
+    if (_facebookAppEvents != null) {
+      await _facebookAppEvents.logEvent(name: event.name, parameters: event.values);
+    }
+    if (_mixpanel != null) {
+      _mixpanel.track(event.name, event.values);
+      await flushEvent();
+    }
+    return Future.value();
   }
 
   Future<void> logScreen(String name) async {
-    if (firebaseAnalytics != null) {
-      return await firebaseAnalytics.setCurrentScreen(
+    if (_firebaseAnalytics != null) {
+      await _firebaseAnalytics.setCurrentScreen(
         screenName: name,
         screenClassOverride: name,
       );
     }
+
+    return Future.value();
+  }
+
+  Future<void> flushEvent() async {
+    if (_mixpanel != null) {
+      _mixpanel.flush();
+    }
+    return Future.value();
+  }
+
+  Future<void> updateUserProp() async {}
+
+  Future<void> logScreenTime(TixEvent event) async {
+    logDebug(event.name, event.values);
+    return await logEvent(event);
   }
 }

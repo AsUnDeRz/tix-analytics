@@ -50,13 +50,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with Tix, TickerProviderStateMixin {
   int _counter = 0;
+  Map<String, dynamic> data;
 
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
     tix(TixEvent.click(_counter)..name = 'incrementCounter');
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Page2()));
+    tix(TixEvent.addToCart(
+      "nooodle",
+      1,
+      25.00,
+    )..addCustomValue({"test": "addmore"}));
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => Page2()));
   }
 
   @override

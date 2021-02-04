@@ -11,6 +11,8 @@ dependencies:
   sentry: ^4.0.4
   device_info: ^0.4.2+4
   firebase_analytics: ^6.0.0
+  facebook_app_events: ^0.8.2
+  flutuate_mixpanel: ^1.1.7
 
 dev_dependencies:
   flutter_test:
