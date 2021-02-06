@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> with Tix, TickerProviderStateMi
       1,
       25.00,
     )..addCustomValue({"test": "addmore"}));
-    // Navigator.push(context, MaterialPageRoute(builder: (context) => Page2()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Page2()));
   }
 
   @override

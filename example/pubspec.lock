@@ -109,9 +109,11 @@ packages:
   facebook_app_events:
     dependency: transitive
     description:
-      name: facebook_app_events
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "708f2a77bdff51a0a49f1ead647de3f06afd97c4"
+      url: "https://github.com/AsUnDeRz/flutter_facebook_app_events.git"
+    source: git
     version: "0.8.2"
   fake_async:
     dependency: transitive
@@ -511,6 +513,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.4"
+  webview_flutter:
+    dependency: "direct main"
+    description:
+      name: webview_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.7"
   yaml:
     dependency: transitive
     description:
