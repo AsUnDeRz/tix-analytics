@@ -103,7 +103,7 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
+      ref: master
       resolved-ref: "708f2a77bdff51a0a49f1ead647de3f06afd97c4"
       url: "https://github.com/AsUnDeRz/flutter_facebook_app_events.git"
     source: git
