@@ -106,15 +106,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.2+4"
-  facebook_app_events:
-    dependency: transitive
-    description:
-      path: "."
-      ref: master
-      resolved-ref: "708f2a77bdff51a0a49f1ead647de3f06afd97c4"
-      url: "https://github.com/AsUnDeRz/flutter_facebook_app_events.git"
-    source: git
-    version: "0.8.2"
   fake_async:
     dependency: transitive
     description:

@@ -4,7 +4,6 @@
  * found in the LICENSE file.
  */
 import 'package:device_info/device_info.dart';
-import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutuate_mixpanel/flutuate_mixpanel.dart';
@@ -19,7 +18,6 @@ class TixAnalytics {
 
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   FirebaseAnalytics _firebaseAnalytics;
-  FacebookAppEvents _facebookAppEvents;
   MixpanelAPI _mixpanel;
   Map<String, String> tagsDeviceInfo = {};
   String env;
@@ -30,7 +28,6 @@ class TixAnalytics {
       {String dsn = '',
       FirebaseAnalytics analytics,
       String envConfig = 'alpha',
-      FacebookAppEvents appEvents,
       MixpanelAPI mixpanel}) async {
     if (dsn.isNotEmpty) {
       await Sentry.init(
@@ -41,10 +38,6 @@ class TixAnalytics {
     }
     if (analytics != null) {
       _firebaseAnalytics = analytics;
-    }
-    if (appEvents != null) {
-      _facebookAppEvents = appEvents;
-      _facebookAppEvents.logActivatedApp();
     }
     if (mixpanel != null) {
       _mixpanel = mixpanel;
@@ -92,9 +85,6 @@ class TixAnalytics {
   Future<void> logEvent(TixEvent event) async {
     if (_firebaseAnalytics != null) {
       await _firebaseAnalytics.logEvent(name: event.name, parameters: event.values);
-    }
-    if (_facebookAppEvents != null) {
-      await _facebookAppEvents.logEvent(name: event.name, parameters: event.values);
     }
     if (_mixpanel != null) {
       _mixpanel.track(event.name, event.values);
