@@ -127,4 +127,34 @@ class TixAnalytics {
     logDebug(event.name, event.values);
     return await logEvent(event);
   }
+
+  Future<void> logPurchase(double amount, {String currency = 'THB'}) async {
+    return await _facebookAppEvents.logPurchase(amount: amount, currency: currency);
+  }
+
+  Future<void> logViewContent(String name, {String type = "product", String id = ""}) async {
+    return await _facebookAppEvents.logViewContent(content: {'name': name}, type: type, id: id);
+  }
+
+  Future<void> logInitiatedCheckout(double totalPrice, int numItems,
+      {String currency = 'THB', String type = "product", String id}) async {
+    return await _facebookAppEvents.logInitiatedCheckout(
+        totalPrice: totalPrice,
+        currency: currency,
+        contentType: type,
+        contentId: "",
+        numItems: numItems);
+  }
+
+  Future<void> logAddToCart(double totalPrice, int numItems,
+      {String currency = 'THB', String type = "product", String id}) async {
+    return await _facebookAppEvents.logEvent(name: 'fb_mobile_add_to_cart',valueToSum:
+    totalPrice,parameters: {
+      FacebookAppEvents.paramNameContentType: type,
+      FacebookAppEvents.paramNameContentId: "",
+      FacebookAppEvents.paramNameNumItems: numItems,
+      FacebookAppEvents.paramNameCurrency: currency,
+    });
+  
+  
 }
