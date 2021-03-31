@@ -147,9 +147,10 @@ class TixAnalytics {
   }
 
   Future<void> logAddToCart(double totalPrice, int numItems,
-      {String currency = 'THB', String type = "product", String id}) async {
+      {String currency = 'THB', String type = "product", String id,String content}) async {
     return await _facebookAppEvents.logEvent(name: 'fb_mobile_add_to_cart',valueToSum:
     totalPrice,parameters: {
+      FacebookAppEvents.paramNameContent: {"name":content},
       FacebookAppEvents.paramNameContentType: type,
       FacebookAppEvents.paramNameContentId: "",
       FacebookAppEvents.paramNameNumItems: numItems,
