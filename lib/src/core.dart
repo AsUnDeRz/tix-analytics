@@ -128,11 +128,11 @@ class TixAnalytics {
     return await logEvent(event);
   }
 
-  Future<void> logPurchase(double amount,int numItems, {String currency = 'THB'}) async {
+  Future<void> logPurchase(double amount, int numItems, {String currency = 'THB'}) async {
     return await _facebookAppEvents.logPurchase(
         amount: amount,
         currency: currency,
-        parameters: {"_valueToSum":amount,"fb_num_items":numItems});
+        parameters: {"_valueToSum": amount, "fb_num_items": numItems});
   }
 
   Future<void> logViewContent(String name, {String type = "product", String id = ""}) async {
@@ -150,15 +150,14 @@ class TixAnalytics {
   }
 
   Future<void> logAddToCart(double totalPrice, int numItems,
-      {String currency = 'THB', String type = "product", String id,String content}) async {
-    return await _facebookAppEvents.logEvent(name: 'fb_mobile_add_to_cart',valueToSum:
-    totalPrice,parameters: {
-      FacebookAppEvents.paramNameContent: {"name":content},
+      {String currency = 'THB', String type = "product", String id, String content}) async {
+    return await _facebookAppEvents
+        .logEvent(name: 'fb_mobile_add_to_cart', valueToSum: totalPrice, parameters: {
+      FacebookAppEvents.paramNameContent: {"name": content},
       FacebookAppEvents.paramNameContentType: type,
       FacebookAppEvents.paramNameContentId: "",
       FacebookAppEvents.paramNameNumItems: numItems,
       FacebookAppEvents.paramNameCurrency: currency,
     });
-  
-  
+  }
 }
