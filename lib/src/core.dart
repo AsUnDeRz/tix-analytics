@@ -128,8 +128,11 @@ class TixAnalytics {
     return await logEvent(event);
   }
 
-  Future<void> logPurchase(double amount, {String currency = 'THB'}) async {
-    return await _facebookAppEvents.logPurchase(amount: amount, currency: currency);
+  Future<void> logPurchase(double amount,int numItems, {String currency = 'THB'}) async {
+    return await _facebookAppEvents.logPurchase(
+        amount: amount,
+        currency: currency,
+        parameters: {"_valueToSum":amount,"fb_num_items":numItems});
   }
 
   Future<void> logViewContent(String name, {String type = "product", String id = ""}) async {
