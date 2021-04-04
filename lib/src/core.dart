@@ -3,6 +3,8 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+import 'dart:convert';
+
 import 'package:device_info/device_info.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -135,8 +137,15 @@ class TixAnalytics {
         parameters: {"_valueToSum": amount, "fb_num_items": numItems});
   }
 
-  Future<void> logViewContent(String name, {String type = "product", String id = ""}) async {
-    return await _facebookAppEvents.logViewContent(content: {'name': name}, type: type, id: id);
+  Future<void> logViewContent(String name,
+      {String type = "product", String id = "", String currency = 'THB'}) async {
+    return await _facebookAppEvents
+        .logEvent(name: 'fb_mobile_content_view', valueToSum: 0.0, parameters: {
+      FacebookAppEvents.paramNameContent: jsonEncode({"name": name}),
+      FacebookAppEvents.paramNameContentType: type,
+      FacebookAppEvents.paramNameContentId: "",
+      FacebookAppEvents.paramNameCurrency: currency,
+    });
   }
 
   Future<void> logInitiatedCheckout(double totalPrice, int numItems,
@@ -153,7 +162,7 @@ class TixAnalytics {
       {String currency = 'THB', String type = "product", String id, String content}) async {
     return await _facebookAppEvents
         .logEvent(name: 'fb_mobile_add_to_cart', valueToSum: totalPrice, parameters: {
-      FacebookAppEvents.paramNameContent: {"name": content},
+      FacebookAppEvents.paramNameContent: jsonEncode({"name": content}),
       FacebookAppEvents.paramNameContentType: type,
       FacebookAppEvents.paramNameContentId: "",
       FacebookAppEvents.paramNameNumItems: numItems,
