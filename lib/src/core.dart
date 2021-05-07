@@ -17,18 +17,18 @@ class TixAnalytics {
   static final TixAnalytics _singleton = TixAnalytics._init();
 
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  FirebaseAnalytics _firebaseAnalytics;
-  MixpanelAPI _mixpanel;
+  FirebaseAnalytics? _firebaseAnalytics;
+  MixpanelAPI? _mixpanel;
   Map<String, String> tagsDeviceInfo = {};
-  String env;
+  String? env;
 
   TixAnalytics._init();
 
   Future init(
       {String dsn = '',
-      FirebaseAnalytics analytics,
+      FirebaseAnalytics? analytics,
       String envConfig = 'alpha',
-      MixpanelAPI mixpanel}) async {
+      MixpanelAPI? mixpanel}) async {
     if (dsn.isNotEmpty) {
       await Sentry.init(
         (options) {
@@ -84,10 +84,10 @@ class TixAnalytics {
 
   Future<void> logEvent(TixEvent event) async {
     if (_firebaseAnalytics != null) {
-      await _firebaseAnalytics.logEvent(name: event.name, parameters: event.values);
+      await _firebaseAnalytics?.logEvent(name: event.name ?? '', parameters: event.values);
     }
     if (_mixpanel != null) {
-      _mixpanel.track(event.name, event.values);
+      _mixpanel?.track(event.name, event.values);
       await flushEvent();
     }
     return Future.value();
@@ -95,7 +95,7 @@ class TixAnalytics {
 
   Future<void> logScreen(String name) async {
     if (_firebaseAnalytics != null) {
-      await _firebaseAnalytics.setCurrentScreen(
+      await _firebaseAnalytics?.setCurrentScreen(
         screenName: name,
         screenClassOverride: name,
       );
@@ -106,7 +106,7 @@ class TixAnalytics {
 
   Future<void> flushEvent() async {
     if (_mixpanel != null) {
-      _mixpanel.flush();
+      _mixpanel?.flush();
     }
     return Future.value();
   }
@@ -114,7 +114,7 @@ class TixAnalytics {
   Future<void> updateUserProp() async {}
 
   Future<void> logScreenTime(TixEvent event) async {
-    logDebug(event.name, event.values);
+    logDebug(event.name ?? '', event.values);
     return await logEvent(event);
   }
 }

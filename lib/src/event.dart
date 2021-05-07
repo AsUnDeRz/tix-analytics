@@ -10,7 +10,7 @@ class TixEvent extends TixBase {
   dynamic values;
 
   @override
-  String get name => super.name == null ? runtimeType.toString() : super.name;
+  String? get name => super.name ?? runtimeType.toString();
 
   TixEvent();
 
@@ -43,13 +43,19 @@ class TixEvent extends TixBase {
   }
 
   TixEvent.initiateCheckout(
-      {double total, int count, String eventName = "initiate_checkout", String currency = "THB"}) {
+      {required double total,
+      required int count,
+      String eventName = "initiate_checkout",
+      String currency = "THB"}) {
     name = eventName;
     values = {"value": total, "items": count, "currency": currency};
   }
 
   TixEvent.checkout(
-      {double total, int count, String eventName = "checkout", String currency = "THB"}) {
+      {required double total,
+      required int count,
+      String eventName = "checkout",
+      String currency = "THB"}) {
     name = eventName;
     values = {"value": total, "items": count, "currency": currency};
   }
@@ -71,9 +77,9 @@ class TixError extends TixBase {
   TixError();
 
   @override
-  String get name => super.name == null ? runtimeType.toString() : super.name;
+  String get name => super.name ?? runtimeType.toString();
 }
 
 abstract class TixBase {
-  String name;
+  String? name;
 }

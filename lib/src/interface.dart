@@ -16,7 +16,7 @@ abstract class TixAnalyticsProvider {
 }
 
 mixin Tix<T extends StatefulWidget> on State<T> implements TixAnalyticsProvider {
-  Timer timer;
+  Timer? timer;
 
   @override
   void tix(dynamic) {
@@ -33,10 +33,10 @@ mixin Tix<T extends StatefulWidget> on State<T> implements TixAnalyticsProvider 
   @override
   void endTix() {
     if (timer != null) {
-      timer.cancel();
+      timer?.cancel();
       TixAnalytics.instance.logScreenTime(TixEvent()
         ..name = 'screen_time'
-        ..values = {"second": timer.tick, "screen_name": "$runtimeType"});
+        ..values = {"second": timer?.tick, "screen_name": "$runtimeType"});
       timer = null;
     }
   }

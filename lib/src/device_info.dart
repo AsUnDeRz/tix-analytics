@@ -8,7 +8,7 @@ import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 
-Future<Map<String, dynamic>> mapperDeviceInfo(DeviceInfoPlugin deviceInfoPlugin) async {
+Future<Map<String, String>> mapperDeviceInfo(DeviceInfoPlugin deviceInfoPlugin) async {
   final deviceInfo = Platform.isAndroid
       ? _readAndroidBuildData(await deviceInfoPlugin.androidInfo)
       : _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
