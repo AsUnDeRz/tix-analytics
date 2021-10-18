@@ -6,7 +6,6 @@
 import 'package:device_info/device_info.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutuate_mixpanel/flutuate_mixpanel.dart';
 import 'package:sentry/sentry.dart';
 import 'package:tix_analytics/src/device_info.dart';
 import 'package:tix_analytics/src/event.dart';
@@ -18,17 +17,12 @@ class TixAnalytics {
 
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   FirebaseAnalytics? _firebaseAnalytics;
-  MixpanelAPI? _mixpanel;
   Map<String, String> tagsDeviceInfo = {};
   String? env;
 
   TixAnalytics._init();
 
-  Future init(
-      {String dsn = '',
-      FirebaseAnalytics? analytics,
-      String envConfig = 'alpha',
-      MixpanelAPI? mixpanel}) async {
+  Future init({String dsn = '', FirebaseAnalytics? analytics, String envConfig = 'alpha'}) async {
     if (dsn.isNotEmpty) {
       await Sentry.init(
         (options) {
@@ -39,10 +33,7 @@ class TixAnalytics {
     if (analytics != null) {
       _firebaseAnalytics = analytics;
     }
-    if (mixpanel != null) {
-      _mixpanel = mixpanel;
-      await flushEvent();
-    }
+
     tagsDeviceInfo = await mapperDeviceInfo(deviceInfoPlugin);
     env = envConfig;
     return Future.value({debugPrint(tagsDeviceInfo.toString())});
@@ -70,12 +61,16 @@ class TixAnalytics {
 
   void logError(String name, dynamic error, dynamic stackTrace) async {
     // await Sentry.captureException(error, stackTrace: stackTrace);
-    await Sentry.captureEvent(
-        SentryEvent(
-            exception: SentryException(type: "error[${error.toString()}]", value: error.toString()),
-            tags: tagsDeviceInfo,
-            environment: env),
-        stackTrace: stackTrace);
+    final result = await filterErrorDuplicate(error.toString());
+    if (result == false) {
+      await Sentry.captureEvent(
+          SentryEvent(
+              exception:
+                  SentryException(type: "error[${error.toString()}]", value: error.toString()),
+              tags: tagsDeviceInfo,
+              environment: env),
+          stackTrace: stackTrace);
+    }
   }
 
   void observeRouteChange(String path) async {
@@ -86,10 +81,7 @@ class TixAnalytics {
     if (_firebaseAnalytics != null) {
       await _firebaseAnalytics?.logEvent(name: event.name ?? '', parameters: event.values);
     }
-    if (_mixpanel != null) {
-      _mixpanel?.track(event.name, event.values);
-      await flushEvent();
-    }
+
     return Future.value();
   }
 
@@ -105,9 +97,6 @@ class TixAnalytics {
   }
 
   Future<void> flushEvent() async {
-    if (_mixpanel != null) {
-      _mixpanel?.flush();
-    }
     return Future.value();
   }
 
@@ -116,5 +105,13 @@ class TixAnalytics {
   Future<void> logScreenTime(TixEvent event) async {
     logDebug(event.name ?? '', event.values);
     return await logEvent(event);
+  }
+
+  Future<bool> filterErrorDuplicate(String error) async {
+    return error.contains('MissingPluginException') ||
+        error.contains('PlatformException') ||
+        error.contains('Bad state: No element') ||
+        error.contains('Instance of') ||
+        error.contains('Bad state: Cannot add new events after calling close');
   }
 }

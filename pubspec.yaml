@@ -12,7 +12,6 @@ dependencies:
   sentry: ^5.0.0
   device_info: ^2.0.0
   firebase_analytics: ^8.0.3
-  flutuate_mixpanel: ^1.1.8
 
 
 dev_dependencies:
