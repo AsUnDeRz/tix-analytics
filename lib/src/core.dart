@@ -22,7 +22,10 @@ class TixAnalytics {
 
   TixAnalytics._init();
 
-  Future init({String dsn = '', FirebaseAnalytics? analytics, String envConfig = 'alpha'}) async {
+  Future init(
+      {String dsn = '',
+      FirebaseAnalytics? analytics,
+      String envConfig = 'alpha'}) async {
     if (dsn.isNotEmpty) {
       await Sentry.init(
         (options) {
@@ -65,8 +68,8 @@ class TixAnalytics {
     if (result == false) {
       await Sentry.captureEvent(
           SentryEvent(
-              exception:
-                  SentryException(type: "error[${error.toString()}]", value: error.toString()),
+              exception: SentryException(
+                  type: "error[${error.toString()}]", value: error.toString()),
               tags: tagsDeviceInfo,
               environment: env),
           stackTrace: stackTrace);
@@ -79,7 +82,8 @@ class TixAnalytics {
 
   Future<void> logEvent(TixEvent event) async {
     if (_firebaseAnalytics != null) {
-      await _firebaseAnalytics?.logEvent(name: event.name ?? '', parameters: event.values);
+      await _firebaseAnalytics?.logEvent(
+          name: event.name ?? '', parameters: event.values);
     }
 
     return Future.value();
@@ -112,6 +116,10 @@ class TixAnalytics {
         error.contains('PlatformException') ||
         error.contains('Bad state: No element') ||
         error.contains('Instance of') ||
-        error.contains('Bad state: Cannot add new events after calling close');
+        error
+            .contains('Bad state: Cannot add new events after calling close') ||
+        error.contains('error[Null check operator used on a null value]') ||
+        error.contains('MethodChannelFirebaseMessaging.getToken') ||
+        error.contains('error[DatabaseError');
   }
 }

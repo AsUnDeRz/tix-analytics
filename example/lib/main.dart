@@ -48,7 +48,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with Tix, TickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage>
+    with Tix, TickerProviderStateMixin {
   int _counter = 0;
   Map<String, dynamic> data;
 
@@ -75,20 +76,6 @@ class _MyHomePageState extends State<MyHomePage> with Tix, TickerProviderStateMi
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
