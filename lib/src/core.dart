@@ -67,11 +67,10 @@ class TixAnalytics {
     final result = await filterErrorDuplicate(error.toString());
     if (result == false) {
       await Sentry.captureEvent(
-          SentryEvent(
-              exception: SentryException(
-                  type: "error[${error.toString()}]", value: error.toString()),
-              tags: tagsDeviceInfo,
-              environment: env),
+          SentryEvent(exceptions: [
+            SentryException(
+                type: "error[${error.toString()}]", value: error.toString())
+          ], tags: tagsDeviceInfo, environment: env),
           stackTrace: stackTrace);
     }
   }
