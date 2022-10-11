@@ -1,6 +1,6 @@
 name: tix_analytics
 description: A new flutter module project.
-version: 1.0.0+1
+version: 3.0.0+1
 publish_to: 'none'
 
 environment:
@@ -9,9 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sentry: ^6.6.1
+  sentry: ^6.12.1
   device_info: ^2.0.3
-  firebase_analytics: ^9.1.12
+  firebase_analytics: ^9.3.8
 
 
 dev_dependencies:
